@@ -1,0 +1,32 @@
+@model LeaveRequest
+@{ ViewData["Title"] = "Sửa đơn nghỉ phép"; }
+<div class="page-header"><h1><i class="fas fa-calendar-minus"></i> Sửa đơn nghỉ phép</h1></div>
+<div class="card" style="max-width:600px"><div class="card-body">
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="EmployeeId" />
+        <input type="hidden" asp-for="TrangThai" />
+        <div class="mb-3">
+            <label asp-for="LoaiNghi" class="form-label"></label>
+            <select asp-for="LoaiNghi" asp-items="Html.GetEnumSelectList<LoaiNghiPhep>()" class="form-select"></select>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label asp-for="NgayBatDau" class="form-label"></label>
+                <input asp-for="NgayBatDau" class="form-control" type="date" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="NgayKetThuc" class="form-label"></label>
+                <input asp-for="NgayKetThuc" class="form-control" type="date" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <label asp-for="LyDo" class="form-label"></label>
+            <textarea asp-for="LyDo" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="LyDo" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Lưu</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Hủy</a>
+    </form>
+</div></div>
+@section Scripts { @await Html.PartialAsync("_ValidationScriptsPartial") }

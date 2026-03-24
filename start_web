@@ -1,0 +1,4 @@
+cd c:\WebQuanLyNhanSu\src-Demo_QuanLyNhanSu_PhamTriHien
+dotnet run
+
+http://localhost:5298 (cấu hình trong launchSettings.json).

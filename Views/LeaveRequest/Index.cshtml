@@ -1,0 +1,17 @@
+@model List<LeaveRequest>
+@{ ViewData["Title"] = "Nghỉ phép"; }
+<div class="page-header text-reveal-stagger"><h1><i class="fas fa-calendar-minus"></i> <span>Quản lý Nghỉ phép</span></h1>
+<a asp-action="Create" class="btn btn-primary btn-magnetic"><span class="btn-text"><i class="fas fa-plus"></i> Tạo đơn</span></a></div>
+<div class="card mb-3"><div class="card-body"><form method="get" class="row g-2 align-items-end">
+    <div class="col-auto"><label>Trạng thái</label><select name="trangThai" class="form-select"><option value="">Tất cả</option>
+    <option value="0" selected="@(ViewBag.TrangThai==0)">Chờ duyệt</option><option value="1" selected="@(ViewBag.TrangThai==1)">Đã duyệt</option>
+    <option value="2" selected="@(ViewBag.TrangThai==2)">Từ chối</option><option value="3" selected="@(ViewBag.TrangThai==3)">Đã hủy</option></select></div>
+    <div class="col-auto"><button class="btn btn-primary"><i class="fas fa-filter"></i> Lọc</button></div>
+</form></div></div>
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0"><thead><tr><th>NV</th><th>Loại</th><th>Từ</th><th>Đến</th><th>Số ngày</th><th>Trạng thái</th><th></th></tr></thead>
+<tbody>@foreach(var lr in Model){<tr class="stagger-item"><td>@lr.Employee.HoTen</td><td>@lr.LoaiNghi.GetDisplayName()</td><td>@lr.NgayBatDau.ToString("dd/MM")</td><td>@lr.NgayKetThuc.ToString("dd/MM")</td><td>@lr.SoNgay</td>
+<td><span class="badge @(lr.TrangThai==TrangThaiDonNghi.DaDuyet?"bg-success":lr.TrangThai==TrangThaiDonNghi.ChoDuyet?"bg-warning":lr.TrangThai==TrangThaiDonNghi.TuChoi?"bg-danger":"bg-secondary")">@lr.TrangThai.GetDisplayName()</span></td>
+<td class="text-end"><a asp-action="Details" asp-route-id="@lr.Id" class="btn-action"><i class="fas fa-eye"></i></a>
+@if(lr.TrangThai==TrangThaiDonNghi.ChoDuyet){<button class="btn-action danger" onclick="confirmDelete('@lr.Employee.HoTen','@Url.Action("DeleteConfirmed",new{id=lr.Id})')"><i class="fas fa-trash"></i></button>}</td></tr>}</tbody></table></div></div>
+@if((int?)ViewBag.TotalPages>1){<nav class="mt-3"><ul class="pagination justify-content-center">@for(int i=1;i<=(int)ViewBag.TotalPages;i++){<li class="page-item @(i==(int)ViewBag.Page?"active":"")"><a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-trangThai="@ViewBag.TrangThai">@i</a></li>}</ul></nav>}

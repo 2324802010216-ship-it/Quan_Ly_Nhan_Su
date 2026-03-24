@@ -1,0 +1,17 @@
+@model Training
+@{ ViewData["Title"] = Model.Id==0?"Thêm khóa đào tạo":"Sửa khóa đào tạo"; var isEdit=Model.Id!=0; }
+<div class="page-header"><h1><i class="fas fa-graduation-cap"></i> @ViewData["Title"]</h1></div>
+<div class="card" style="max-width:600px"><div class="card-body">
+<form asp-action="@(isEdit?"Edit":"Create")" method="post">
+    @if(isEdit){<input type="hidden" asp-for="Id" />}
+    <div class="form-group mb-3"><label asp-for="TenKhoaHoc"></label><input asp-for="TenKhoaHoc" class="form-control" /></div>
+    <div class="form-group mb-3"><label asp-for="MoTa"></label><textarea asp-for="MoTa" class="form-control" rows="3"></textarea></div>
+    <div class="row mb-3"><div class="col"><label asp-for="NgayBatDau"></label><input asp-for="NgayBatDau" type="date" class="form-control" /></div>
+    <div class="col"><label asp-for="NgayKetThuc"></label><input asp-for="NgayKetThuc" type="date" class="form-control" /></div></div>
+    <div class="row mb-3"><div class="col"><label asp-for="DiaDiem"></label><input asp-for="DiaDiem" class="form-control" /></div>
+    <div class="col"><label asp-for="NguoiDaoTao"></label><input asp-for="NguoiDaoTao" class="form-control" /></div></div>
+    <div class="form-group mb-3"><label asp-for="ChiPhi"></label><input asp-for="ChiPhi" type="number" class="form-control" /></div>
+    <div class="d-flex gap-2"><button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Lưu</button><a asp-action="Index" class="btn btn-secondary">Hủy</a></div>
+</form></div></div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

@@ -1,0 +1,40 @@
+@{ ViewData["Title"] = "Tạo tài khoản"; }
+<div class="page-header">
+    <h1><i class="fas fa-user-plus"></i> Tạo tài khoản mới</h1>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Register" method="post" style="max-width:500px">
+            <div class="form-group mb-3">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required />
+            </div>
+            <div class="form-group mb-3">
+                <label>Họ tên</label>
+                <input type="text" name="hoTen" class="form-control" required />
+            </div>
+            <div class="form-group mb-3">
+                <label>Mật khẩu</label>
+                <input type="password" name="password" class="form-control" required />
+            </div>
+            <div class="form-group mb-3">
+                <label>Vai trò</label>
+                <select name="role" class="form-select">
+                    <option value="Employee">Nhân viên</option>
+                    <option value="DeptManager">Trưởng phòng</option>
+                    <option value="HRManager">Quản lý HR</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label>Liên kết nhân viên</label>
+                <select name="employeeId" class="form-select" asp-items="@ViewBag.Employees">
+                    <option value="">-- Không liên kết --</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Tạo tài khoản</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

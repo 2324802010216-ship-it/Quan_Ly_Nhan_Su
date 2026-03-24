@@ -1,0 +1,16 @@
+@model List<Training>
+@{ ViewData["Title"] = "Đào tạo"; }
+<div class="page-header text-reveal-stagger"><h1><i class="fas fa-graduation-cap"></i> <span>Đào tạo</span></h1>
+<a asp-action="Create" class="btn btn-primary btn-magnetic"><span class="btn-text"><i class="fas fa-plus"></i> Thêm</span></a></div>
+<div class="card mb-3"><div class="card-body"><form method="get" class="row g-2 align-items-end">
+    <div class="col-md-4"><input name="search" value="@ViewBag.Search" class="form-control" placeholder="Tìm tên khóa học..." /></div>
+    <div class="col-auto"><button class="btn btn-primary"><i class="fas fa-search"></i> Tìm</button></div>
+    @if(ViewBag.Search!=null){<div class="col-auto"><a asp-action="Index" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Xóa lọc</a></div>}
+</form></div></div>
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0"><thead><tr><th>Khóa học</th><th>Bắt đầu</th><th>Kết thúc</th><th>Địa điểm</th><th>HV</th><th>Chi phí</th><th></th></tr></thead>
+<tbody>@foreach(var t in Model){<tr class="stagger-item"><td><strong>@t.TenKhoaHoc</strong></td><td>@t.NgayBatDau.ToString("dd/MM/yyyy")</td><td>@t.NgayKetThuc.ToString("dd/MM/yyyy")</td><td>@(t.DiaDiem??"—")</td>
+<td><span class="badge bg-info">@t.TrainingEmployees.Count</span></td><td>@t.ChiPhi.ToString("N0")₫</td>
+<td class="text-end"><a asp-action="Details" asp-route-id="@t.Id" class="btn-action"><i class="fas fa-eye"></i></a><a asp-action="Edit" asp-route-id="@t.Id" class="btn-action"><i class="fas fa-edit"></i></a>
+<button class="btn-action danger" onclick="confirmDelete('@t.TenKhoaHoc','@Url.Action("DeleteConfirmed",new{id=t.Id})')"><i class="fas fa-trash"></i></button></td></tr>}</tbody></table></div></div>
+@if((int?)ViewBag.TotalPages>1){<nav class="mt-3"><ul class="pagination justify-content-center">@for(int i=1;i<=(int)ViewBag.TotalPages;i++){<li class="page-item @(i==(int)ViewBag.Page?"active":"")"><a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@ViewBag.Search">@i</a></li>}</ul></nav>}

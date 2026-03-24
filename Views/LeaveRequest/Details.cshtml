@@ -1,0 +1,24 @@
+@model LeaveRequest
+@{ ViewData["Title"] = "Chi tiết đơn nghỉ"; var bal = ViewBag.Balance as LeaveBalanceViewModel; }
+<div class="page-header"><h1><i class="fas fa-calendar-minus"></i> Đơn nghỉ #@Model.Id</h1><div class="d-flex gap-2">
+@if(Model.TrangThai==TrangThaiDonNghi.ChoDuyet){<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-edit me-1"></i>Sửa</a>
+<button class="btn btn-danger" onclick="confirmDelete('đơn nghỉ #@Model.Id','@Url.Action("DeleteConfirmed",new{id=Model.Id})')"><i class="fas fa-trash me-1"></i>Hủy đơn</button>}
+</div></div>
+<div class="row g-4">
+    <div class="col-md-6 stagger-item"><div class="card"><div class="card-body">
+        <p><strong>Nhân viên:</strong> @Model.Employee.HoTen</p>
+        <p><strong>Loại nghỉ:</strong> @Model.LoaiNghi.GetDisplayName()</p>
+        <p><strong>Từ:</strong> @Model.NgayBatDau.ToString("dd/MM/yyyy") <strong>→</strong> @Model.NgayKetThuc.ToString("dd/MM/yyyy") (@Model.SoNgay ngày)</p>
+        <p><strong>Lý do:</strong> @Model.LyDo</p>
+        <p><strong>Trạng thái:</strong> <span class="badge @(Model.TrangThai==TrangThaiDonNghi.DaDuyet?"bg-success":Model.TrangThai==TrangThaiDonNghi.ChoDuyet?"bg-warning":"bg-danger")">@Model.TrangThai.GetDisplayName()</span></p>
+        @if(Model.LyDoTuChoi != null){<p class="text-danger"><strong>Lý do từ chối:</strong> @Model.LyDoTuChoi</p>}
+    </div></div></div>
+    <div class="col-md-6 stagger-item"><div class="card"><div class="card-body">
+        @if(bal != null){<p><strong>Phép năm:</strong> @bal.SoNgayPhepNam ngày</p><p><strong>Đã dùng:</strong> @bal.SoNgayDaDung</p><p><strong>Còn lại:</strong> <span class="badge bg-info">@bal.SoNgayConLai ngày</span></p>}
+        @if(Model.TrangThai==TrangThaiDonNghi.ChoDuyet && (User.IsInRole("Admin")||User.IsInRole("HRManager")||User.IsInRole("DeptManager"))){
+        <hr/><div class="d-flex gap-2">
+            <form asp-action="Approve" asp-route-id="@Model.Id" method="post"><button class="btn btn-success"><i class="fas fa-check me-1"></i>Duyệt</button></form>
+            <form asp-action="Reject" asp-route-id="@Model.Id" method="post" class="d-flex gap-2"><input name="lyDoTuChoi" class="form-control" placeholder="Lý do từ chối..." required /><button class="btn btn-danger"><i class="fas fa-times me-1"></i>Từ chối</button></form>
+        </div>}
+    </div></div></div>
+</div>

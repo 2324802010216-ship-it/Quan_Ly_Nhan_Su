@@ -1,0 +1,18 @@
+@model List<Candidate>
+@{ ViewData["Title"] = "Ứng viên"; }
+<div class="page-header text-reveal-stagger"><h1><i class="fas fa-user-tie"></i> <span>Quản lý Ứng viên</span></h1></div>
+<div class="card mb-3"><div class="card-body"><form method="get" class="row g-2 align-items-end">
+    <div class="col-auto"><label>Trạng thái</label><select name="trangThai" class="form-select"><option value="">Tất cả</option>
+    <option value="0" selected="@(ViewBag.TrangThai==0)">Mới ứng tuyển</option><option value="1" selected="@(ViewBag.TrangThai==1)">Đang phỏng vấn</option>
+    <option value="2" selected="@(ViewBag.TrangThai==2)">Đạt vòng</option><option value="3" selected="@(ViewBag.TrangThai==3)">Loại vòng</option>
+    <option value="4" selected="@(ViewBag.TrangThai==4)">Trúng tuyển</option><option value="5" selected="@(ViewBag.TrangThai==5)">Đã nhận việc</option></select></div>
+    <div class="col-auto"><button class="btn btn-primary"><i class="fas fa-filter"></i> Lọc</button></div>
+</form></div></div>
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0"><thead><tr><th>#</th><th>Họ tên</th><th>Email</th><th>SĐT</th><th>Tin tuyển dụng</th><th>Ngày ứng tuyển</th><th>Trạng thái</th><th></th></tr></thead>
+<tbody>@foreach(var c in Model){<tr class="stagger-item"><td>@c.Id</td><td><strong>@c.HoTen</strong></td><td>@(c.Email??"—")</td><td>@(c.SDT??"—")</td><td>@c.Recruitment?.TieuDe</td><td>@c.NgayUngTuyen.ToString("dd/MM/yyyy")</td>
+<td><span class="badge @(c.TrangThai==TrangThaiUngVien.TrungTuyen||c.TrangThai==TrangThaiUngVien.DaNhanViec?"bg-success":c.TrangThai==TrangThaiUngVien.LoaiVong?"bg-danger":c.TrangThai==TrangThaiUngVien.DangPhongVan?"bg-warning text-dark":"bg-info")">@c.TrangThai.GetDisplayName()</span></td>
+<td class="text-end"><a asp-action="Details" asp-route-id="@c.Id" class="btn-action"><i class="fas fa-eye"></i></a><a asp-action="Edit" asp-route-id="@c.Id" class="btn-action"><i class="fas fa-edit"></i></a>
+<button class="btn-action danger" onclick="confirmDelete('@c.HoTen','@Url.Action("DeleteConfirmed",new{id=c.Id})')"><i class="fas fa-trash"></i></button></td></tr>}
+@if(!Model.Any()){<tr><td colspan="8" class="text-center text-muted py-4">Chưa có ứng viên nào</td></tr>}</tbody></table></div></div>
+@if((int?)ViewBag.TotalPages>1){<nav class="mt-3"><ul class="pagination justify-content-center">@for(int i=1;i<=(int)ViewBag.TotalPages;i++){<li class="page-item @(i==(int)ViewBag.Page?"active":"")"><a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-trangThai="@ViewBag.TrangThai">@i</a></li>}</ul></nav>}

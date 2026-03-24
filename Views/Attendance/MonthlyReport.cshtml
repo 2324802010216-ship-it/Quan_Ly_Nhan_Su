@@ -1,0 +1,15 @@
+@model AttendanceReportViewModel
+@{ ViewData["Title"] = "Báo cáo chấm công tháng"; }
+<div class="page-header"><h1><i class="fas fa-chart-bar"></i> Báo cáo chấm công T@(Model.Thang)/@(Model.Nam)</h1></div>
+<div class="card mb-3"><div class="card-body"><form method="get" class="row g-2 align-items-end">
+    <div class="col-auto"><input type="number" name="thang" value="@Model.Thang" min="1" max="12" class="form-control" /></div>
+    <div class="col-auto"><input type="number" name="nam" value="@Model.Nam" class="form-control" /></div>
+    <div class="col-auto"><select name="departmentId" class="form-select"><option value="">Tất cả</option>@foreach(var d in Model.Departments){<option value="@d.Id" selected="@(Model.DepartmentId==d.Id)">@d.TenPhongBan</option>}</select></div>
+    <div class="col-auto"><button class="btn btn-primary"><i class="fas fa-filter"></i> Lọc</button></div>
+</form></div></div>
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0"><thead><tr><th>NV</th><th>Phòng ban</th><th>Đi làm</th><th>Trễ</th><th>Vắng</th><th>Nghỉ phép</th><th>Công tác</th><th>Tổng giờ</th></tr></thead>
+<tbody>@foreach(var s in Model.Summaries){<tr class="stagger-item"><td><strong>@s.Employee.HoTen</strong></td><td>@s.Employee.Department.TenPhongBan</td>
+<td><span class="badge bg-success">@s.NgayDiLam</span></td><td><span class="badge bg-warning">@s.NgayTreMuon</span></td>
+<td><span class="badge bg-danger">@s.NgayVangMat</span></td><td><span class="badge bg-info">@s.NgayNghiPhep</span></td>
+<td>@s.NgayCongTac</td><td>@s.TongGioLam.ToString("F1")h</td></tr>}</tbody></table></div></div>

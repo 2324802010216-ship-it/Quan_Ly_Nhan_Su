@@ -1,0 +1,21 @@
+@model Salary
+@{ ViewData["Title"] = "Phiếu lương"; }
+<div class="page-header"><h1><i class="fas fa-receipt"></i> Phiếu lương T@(Model.Thang)/@(Model.Nam)</h1><div class="d-flex gap-2">
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-edit me-1"></i>Sửa</a>
+<button class="btn btn-danger" onclick="confirmDelete('lương @Model.Employee.HoTen','@Url.Action("DeleteConfirmed",new{id=Model.Id})')"><i class="fas fa-trash me-1"></i>Xóa</button>
+<button onclick="window.print()" class="btn btn-outline-secondary"><i class="fas fa-print me-1"></i>In</button></div></div>
+<div class="card print-area" style="max-width:700px"><div class="card-body">
+    <div class="text-center mb-4"><h4>PHIẾU LƯƠNG THÁNG @Model.Thang/@Model.Nam</h4><p class="text-muted">Ngày tính: @Model.NgayTinhLuong.ToString("dd/MM/yyyy") — @Model.NguoiTinhLuong</p></div>
+    <div class="row mb-3"><div class="col-6"><p><strong>Nhân viên:</strong> @Model.Employee.HoTen</p><p><strong>Mã NV:</strong> @Model.Employee.MaNV</p></div>
+    <div class="col-6"><p><strong>Phòng ban:</strong> @Model.Employee.Department.TenPhongBan</p><p><strong>Chức vụ:</strong> @Model.Employee.Position.TenChucVu</p></div></div>
+    <table class="table"><tbody>
+        <tr><td>Lương cơ bản</td><td class="text-end">@Model.LuongCoBan.ToString("N0") ₫</td></tr>
+        <tr><td>Phụ cấp</td><td class="text-end text-success">+ @Model.PhuCap.ToString("N0") ₫</td></tr>
+        <tr><td>Tăng ca</td><td class="text-end text-success">+ @Model.TangCa.ToString("N0") ₫</td></tr>
+        <tr><td>BHXH (8%)</td><td class="text-end text-danger">- @Model.BHXH.ToString("N0") ₫</td></tr>
+        <tr><td>BHYT (1.5%)</td><td class="text-end text-danger">- @Model.BHYT.ToString("N0") ₫</td></tr>
+        <tr><td>BHTN (1%)</td><td class="text-end text-danger">- @Model.BHTN.ToString("N0") ₫</td></tr>
+        <tr><td>Khấu trừ khác</td><td class="text-end text-danger">- @Model.KhauTru.ToString("N0") ₫</td></tr>
+        <tr class="table-active fw-bold"><td>THỰC LÃNH</td><td class="text-end text-primary fs-5">@Model.ThucLanh.ToString("N0") ₫</td></tr>
+    </tbody></table>
+</div></div>

@@ -1,0 +1,24 @@
+@model List<Position>
+@{ ViewData["Title"] = "Chức vụ"; }
+<div class="page-header text-reveal-stagger">
+    <h1><i class="fas fa-user-tag"></i> <span>Quản lý Chức vụ</span></h1>
+    <a asp-action="Create" class="btn btn-primary btn-magnetic"><span class="btn-text"><i class="fas fa-plus"></i> Thêm mới</span></a>
+</div>
+<div class="card mb-3"><div class="card-body py-2">
+<form method="get" class="row g-2 align-items-center">
+    <div class="col-md-4"><input name="search" value="@ViewBag.Search" class="form-control" placeholder="Tìm tên chức vụ..." /></div>
+    <div class="col-auto"><button type="submit" class="btn btn-primary"><i class="fas fa-search me-1"></i>Tìm</button></div>
+    @if(ViewBag.Search != null){<div class="col-auto"><a asp-action="Index" class="btn btn-outline-secondary"><i class="fas fa-times me-1"></i>Xóa lọc</a></div>}
+</form>
+</div></div>
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0">
+    <thead><tr><th>#</th><th>Tên chức vụ</th><th>Cấp bậc</th><th>Lương cơ sở</th><th>Số NV</th><th></th></tr></thead>
+    <tbody>
+        @foreach (var p in Model)
+        {<tr class="stagger-item"><td>@p.Id</td><td><strong>@p.TenChucVu</strong></td><td><span class="badge bg-info">Cấp @p.CapBac</span></td><td>@p.MucLuongCoSo.ToString("N0") ₫</td><td>@p.Employees.Count</td>
+        <td class="text-end"><a asp-action="Details" asp-route-id="@p.Id" class="btn-action" data-tooltip="Chi tiết"><i class="fas fa-eye"></i></a><a asp-action="Edit" asp-route-id="@p.Id" class="btn-action" data-tooltip="Sửa"><i class="fas fa-edit"></i></a>
+        <button class="btn-action danger" data-tooltip="Xóa" onclick="confirmDelete('@p.TenChucVu','@Url.Action("DeleteConfirmed",new{id=p.Id})')"><i class="fas fa-trash"></i></button></td></tr>}
+    </tbody>
+</table></div></div>
+@if((int?)ViewBag.TotalPages>1){<nav class="mt-3"><ul class="pagination justify-content-center">@for(int i=1;i<=(int)ViewBag.TotalPages;i++){<li class="page-item @(i==(int)ViewBag.Page?"active":"")"><a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@ViewBag.Search">@i</a></li>}</ul></nav>}

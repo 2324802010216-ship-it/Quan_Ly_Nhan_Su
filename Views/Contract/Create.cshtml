@@ -1,0 +1,17 @@
+@model Contract
+@{ ViewData["Title"] = (Model?.Id ?? 0)==0?"Thêm hợp đồng":"Sửa hợp đồng"; var isEdit=(Model?.Id ?? 0)!=0; }
+<div class="page-header"><h1><i class="fas fa-file-contract"></i> @ViewData["Title"]</h1></div>
+<div class="card" style="max-width:600px"><div class="card-body">
+<form asp-action="@(isEdit?"Edit":"Create")" method="post">
+    @if(isEdit){<input type="hidden" asp-for="Id" />}
+    <div class="form-group mb-3"><label asp-for="EmployeeId"></label><select asp-for="EmployeeId" class="form-select" asp-items="@ViewBag.Employees"></select></div>
+    <div class="form-group mb-3"><label asp-for="MaHopDong"></label><input asp-for="MaHopDong" class="form-control" /></div>
+    <div class="row mb-3"><div class="col"><label asp-for="LoaiHopDong"></label><select asp-for="LoaiHopDong" asp-items="Html.GetEnumSelectList<LoaiHopDong>()" class="form-select"></select></div>
+    <div class="col"><label asp-for="TrangThai"></label><select asp-for="TrangThai" asp-items="Html.GetEnumSelectList<TrangThaiHopDong>()" class="form-select"></select></div></div>
+    <div class="row mb-3"><div class="col"><label asp-for="NgayBatDau"></label><input asp-for="NgayBatDau" type="date" class="form-control" /></div>
+    <div class="col"><label asp-for="NgayKetThuc"></label><input asp-for="NgayKetThuc" type="date" class="form-control" /></div></div>
+    <div class="form-group mb-3"><label asp-for="LuongHopDong"></label><input asp-for="LuongHopDong" type="number" class="form-control" /></div>
+    <div class="d-flex gap-2"><button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Lưu</button><a asp-action="Index" class="btn btn-secondary">Hủy</a></div>
+</form></div></div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

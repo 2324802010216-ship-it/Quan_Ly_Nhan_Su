@@ -1,0 +1,33 @@
+@{ ViewData["Title"] = "Báo cáo"; }
+<div class="page-header text-reveal-stagger"><h1><i class="fas fa-chart-bar"></i> <span>Xuất Báo cáo</span></h1></div>
+<div class="row g-4">
+    <div class="col-md-3 stagger-item"><div class="card"><div class="card-body text-center">
+        <i class="fas fa-users fa-2x text-primary mb-3"></i><h6>Danh sách nhân viên</h6><p class="text-muted small">Xuất Excel toàn bộ NV</p>
+        <form asp-action="Export" method="post"><input type="hidden" name="ReportType" value="employees" />
+        <select name="DepartmentId" class="form-select mb-2"><option value="">Tất cả phòng ban</option>@foreach(var d in (List<Department>)ViewBag.Departments){<option value="@d.Id">@d.TenPhongBan</option>}</select>
+        <button class="btn btn-primary w-100"><i class="fas fa-download me-1"></i>Tải Excel</button></form>
+    </div></div></div>
+    <div class="col-md-3 stagger-item"><div class="card"><div class="card-body text-center">
+        <i class="fas fa-money-bill-wave fa-2x text-success mb-3"></i><h6>Bảng lương</h6><p class="text-muted small">Theo tháng/năm</p>
+        <form asp-action="Export" method="post"><input type="hidden" name="ReportType" value="salary" />
+        <div class="row g-2 mb-2"><div class="col"><input name="Thang" type="number" value="@DateTime.Now.Month" min="1" max="12" class="form-control" /></div>
+        <div class="col"><input name="Nam" type="number" value="@DateTime.Now.Year" class="form-control" /></div></div>
+        <button class="btn btn-success w-100"><i class="fas fa-download me-1"></i>Tải Excel</button></form>
+    </div></div></div>
+    <div class="col-md-3 stagger-item"><div class="card"><div class="card-body text-center">
+        <i class="fas fa-calendar-check fa-2x text-info mb-3"></i><h6>Chấm công</h6><p class="text-muted small">Theo tháng/năm</p>
+        <form asp-action="Export" method="post"><input type="hidden" name="ReportType" value="attendance" />
+        <div class="row g-2 mb-2"><div class="col"><input name="Thang" type="number" value="@DateTime.Now.Month" min="1" max="12" class="form-control" /></div>
+        <div class="col"><input name="Nam" type="number" value="@DateTime.Now.Year" class="form-control" /></div></div>
+        <button class="btn btn-info w-100 text-white"><i class="fas fa-download me-1"></i>Tải Excel</button></form>
+    </div></div></div>
+    <div class="col-md-3 stagger-item"><div class="card"><div class="card-body text-center">
+        <i class="fas fa-calendar-minus fa-2x text-warning mb-3"></i><h6>Nghỉ phép</h6><p class="text-muted small">Tổng hợp nghỉ phép</p>
+        <form asp-action="Export" method="post"><input type="hidden" name="ReportType" value="leave" />
+        <div class="row g-2 mb-2"><div class="col"><input name="Thang" type="number" value="@DateTime.Now.Month" min="1" max="12" class="form-control" /></div>
+        <div class="col"><input name="Nam" type="number" value="@DateTime.Now.Year" class="form-control" /></div></div>
+        <select name="DepartmentId" class="form-select mb-2"><option value="">Tất cả phòng ban</option>@foreach(var d in (List<Department>)ViewBag.Departments){<option value="@d.Id">@d.TenPhongBan</option>}</select>
+        <button class="btn btn-warning w-100"><i class="fas fa-download me-1"></i>Tải Excel</button></form>
+    </div></div></div>
+</div>
+

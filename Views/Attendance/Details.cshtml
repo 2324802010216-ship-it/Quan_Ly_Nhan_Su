@@ -1,0 +1,18 @@
+@model Attendance
+@{ ViewData["Title"] = "Chi tiết chấm công"; }
+<div class="page-header"><h1><i class="fas fa-calendar-check"></i> Chấm công #@Model.Id</h1><div class="d-flex gap-2">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-edit me-1"></i>Sửa</a>
+    <button class="btn btn-danger" onclick="confirmDelete('@Model.Employee.HoTen — @Model.Ngay.ToString("dd/MM/yyyy")','@Url.Action("DeleteConfirmed",new{id=Model.Id})')"><i class="fas fa-trash me-1"></i>Xóa</button>
+</div></div>
+<div class="card" style="max-width:600px"><div class="card-body">
+    <p><strong>Nhân viên:</strong> <a asp-controller="Employee" asp-action="Details" asp-route-id="@Model.EmployeeId">@Model.Employee.HoTen</a></p>
+    <p><strong>Phòng ban:</strong> @(Model.Employee.Department?.TenPhongBan ?? "—")</p>
+    <p><strong>Ngày:</strong> @Model.Ngay.ToString("dd/MM/yyyy")</p>
+    <p><strong>Giờ vào:</strong> @(Model.GioVao?.ToString() ?? "—")</p>
+    <p><strong>Giờ ra:</strong> @(Model.GioRa?.ToString() ?? "—")</p>
+    <p><strong>Số giờ làm:</strong> @(Model.SoGioLam?.ToString("F1") ?? "—") giờ</p>
+    <p><strong>Trạng thái:</strong> <span class="badge @(Model.TrangThai==TrangThaiChamCong.DungGio?"bg-success":Model.TrangThai==TrangThaiChamCong.TreMuon?"bg-warning":"bg-secondary")">@Model.TrangThai.GetDisplayName()</span></p>
+    @if(Model.GhiChu!=null){<p><strong>Ghi chú:</strong> @Model.GhiChu</p>}
+    <hr/>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Quay lại</a>
+</div></div>

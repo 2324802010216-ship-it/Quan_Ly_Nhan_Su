@@ -1,0 +1,15 @@
+@model Candidate
+@{ ViewData["Title"] = "Thêm ứng viên"; }
+<div class="page-header"><h1><i class="fas fa-user-plus"></i> Thêm ứng viên</h1></div>
+<div class="card" style="max-width:500px"><div class="card-body">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="RecruitmentId" value="@ViewBag.RecruitmentId" />
+    <div class="form-group mb-3"><label asp-for="HoTen"></label><input asp-for="HoTen" class="form-control" required /></div>
+    <div class="row mb-3"><div class="col"><label asp-for="Email"></label><input asp-for="Email" type="email" class="form-control" /></div>
+    <div class="col"><label asp-for="SDT"></label><input asp-for="SDT" class="form-control" /></div></div>
+    <div class="form-group mb-3"><label asp-for="NgayUngTuyen"></label><input asp-for="NgayUngTuyen" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" /></div>
+    <div class="form-group mb-3"><label>CV (PDF/DOC)</label><input type="file" name="cv" accept=".pdf,.doc,.docx" class="form-control" /></div>
+    <button type="submit" class="btn btn-primary w-100"><i class="fas fa-save me-1"></i>Thêm</button>
+</form></div></div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

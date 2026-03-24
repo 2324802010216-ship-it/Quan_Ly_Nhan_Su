@@ -1,0 +1,14 @@
+@model Salary
+@{ ViewData["Title"] = "Sửa bảng lương"; }
+<div class="page-header"><h1><i class="fas fa-money-bill-wave"></i> Sửa lương T@(Model.Thang)/@(Model.Nam)</h1></div>
+<div class="card" style="max-width:500px"><div class="card-body">
+    <p><strong>Nhân viên:</strong> @Model.Employee.HoTen (@Model.Employee.MaNV)</p>
+    <p><strong>Lương cơ bản:</strong> @Model.LuongCoBan.ToString("N0") ₫</p>
+    <p><strong>BHXH+BHYT+BHTN:</strong> @((Model.BHXH+Model.BHYT+Model.BHTN).ToString("N0")) ₫</p>
+    <hr/>
+<form asp-action="Edit" method="post">
+    <div class="form-group mb-3"><label>Phụ cấp</label><input name="phuCap" type="number" value="@Model.PhuCap" class="form-control" /></div>
+    <div class="form-group mb-3"><label>Tăng ca</label><input name="tangCa" type="number" value="@Model.TangCa" class="form-control" /></div>
+    <div class="form-group mb-3"><label>Khấu trừ khác</label><input name="khauTru" type="number" value="@Model.KhauTru" class="form-control" /></div>
+    <div class="d-flex gap-2"><button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Lưu</button><a asp-action="Index" class="btn btn-secondary">Hủy</a></div>
+</form></div></div>

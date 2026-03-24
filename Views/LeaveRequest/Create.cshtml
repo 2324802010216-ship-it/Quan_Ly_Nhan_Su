@@ -1,0 +1,18 @@
+@model LeaveRequest
+@{ ViewData["Title"] = "Tạo đơn nghỉ phép"; }
+<div class="page-header"><h1><i class="fas fa-calendar-minus"></i> Tạo đơn nghỉ phép</h1></div>
+@if(ViewBag.Balance != null){
+<div class="alert alert-info d-flex align-items-center mb-3" style="max-width:500px">
+    <i class="fas fa-info-circle me-2"></i>
+    <span>Phép năm @DateTime.Now.Year: đã dùng <strong>@ViewBag.Balance.SoNgayDaDung / @ViewBag.Balance.SoNgayPhepNam</strong> ngày — còn lại <strong class="text-primary">@ViewBag.Balance.SoNgayConLai ngày</strong></span>
+</div>}
+<div class="card" style="max-width:500px"><div class="card-body">
+<form asp-action="Create" method="post">
+    <div class="form-group mb-3"><label asp-for="LoaiNghi"></label><select asp-for="LoaiNghi" asp-items="Html.GetEnumSelectList<LoaiNghiPhep>()" class="form-select"></select></div>
+    <div class="row mb-3"><div class="col"><label asp-for="NgayBatDau"></label><input asp-for="NgayBatDau" type="date" class="form-control" /></div>
+    <div class="col"><label asp-for="NgayKetThuc"></label><input asp-for="NgayKetThuc" type="date" class="form-control" /></div></div>
+    <div class="form-group mb-3"><label asp-for="LyDo"></label><textarea asp-for="LyDo" class="form-control" rows="3" required></textarea><span asp-validation-for="LyDo" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary w-100"><i class="fas fa-paper-plane me-1"></i>Gửi đơn</button>
+</form></div></div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

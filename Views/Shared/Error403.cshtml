@@ -1,0 +1,30 @@
+@{ ViewData["Title"] = "403 — Truy cập bị từ chối"; Layout = null; }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>403 — HRMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #f1f5f9; }
+        .error-container { text-align: center; padding: 2rem; }
+        .error-code { font-size: 8rem; font-weight: 700; background: linear-gradient(135deg, #f59e0b, #ef4444);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+        .error-title { font-size: 1.5rem; font-weight: 600; margin: 1rem 0 .5rem; }
+        .error-desc { color: #94a3b8; margin-bottom: 2rem; }
+        .btn-home { display: inline-block; padding: .75rem 2rem; background: #3b82f6; color: #fff; text-decoration: none;
+            border-radius: 8px; font-weight: 600; transition: background .2s; }
+        .btn-home:hover { background: #2563eb; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">403</div>
+        <h1 class="error-title">Truy cập bị từ chối</h1>
+        <p class="error-desc">Bạn không có quyền truy cập trang này. Vui lòng liên hệ quản trị viên.</p>
+        <a href="/" class="btn-home">Về trang chủ</a>
+    </div>
+</body>
+</html>

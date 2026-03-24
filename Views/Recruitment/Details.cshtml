@@ -1,0 +1,16 @@
+@model Recruitment
+@{ ViewData["Title"] = Model.TieuDe; }
+<div class="page-header"><h1><i class="fas fa-bullhorn"></i> @Model.TieuDe</h1>
+<a asp-controller="Candidate" asp-action="Create" asp-route-recruitmentId="@Model.Id" class="btn btn-primary"><i class="fas fa-user-plus me-1"></i>Thêm ứng viên</a></div>
+<div class="row g-4">
+    <div class="col-md-4 stagger-item"><div class="card"><div class="card-body">
+        <p><strong>Phòng ban:</strong> @Model.Department.TenPhongBan</p><p><strong>Chức vụ:</strong> @Model.Position.TenChucVu</p>
+        <p><strong>Số lượng:</strong> @Model.SoLuong</p><p><strong>Hạn nộp:</strong> @Model.HanNop.ToString("dd/MM/yyyy")</p>
+        <p><strong>Trạng thái:</strong> <span class="badge @(Model.TrangThai==TrangThaiTuyenDung.MoTuyenDung?"bg-success":"bg-secondary")">@Model.TrangThai.GetDisplayName()</span></p>
+        @if(Model.MoTaCongViec!=null){<hr/><p><strong>Mô tả:</strong></p><p>@Model.MoTaCongViec</p>}
+    </div></div></div>
+    <div class="col-md-8 stagger-item"><div class="card"><div class="card-header"><h6>Ứng viên (@Model.Candidates.Count)</h6></div><div class="card-body p-0">
+        <table class="table table-hover mb-0"><thead><tr><th>Họ tên</th><th>Email</th><th>SĐT</th><th>Ngày UT</th><th>Trạng thái</th><th></th></tr></thead>
+        <tbody>@foreach(var c in Model.Candidates){<tr><td>@c.HoTen</td><td>@c.Email</td><td>@c.SDT</td><td>@c.NgayUngTuyen.ToString("dd/MM")</td>
+        <td><span class="badge bg-info">@c.TrangThai.GetDisplayName()</span></td><td><a asp-controller="Candidate" asp-action="Details" asp-route-id="@c.Id" class="btn-action"><i class="fas fa-eye"></i></a></td></tr>}</tbody></table></div></div></div>
+</div>

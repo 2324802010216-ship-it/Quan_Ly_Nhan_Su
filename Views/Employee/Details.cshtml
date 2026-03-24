@@ -1,0 +1,49 @@
+@model Employee
+@{ ViewData["Title"] = "Chi tiết nhân viên"; }
+<div class="page-header"><h1><i class="fas fa-user"></i> @Model.HoTen</h1>
+<div class="d-flex gap-2">
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-edit me-1"></i>Sửa</a>
+@if(User.IsInRole("Admin")){<button class="btn btn-outline-danger" onclick="confirmDelete('@Model.HoTen','@Url.Action("DeleteConfirmed",new{id=Model.Id})')"><i class="fas fa-trash me-1"></i>Xóa</button>}
+</div></div>
+<div class="row g-4">
+    <div class="col-md-4 stagger-item"><div class="card"><div class="card-body text-center">
+        <img src="@(Model.AnhDaiDien ?? "/images/default-avatar.png")" class="rounded-circle mb-3" width="100" height="100" style="object-fit:cover"/>
+        <h5>@Model.HoTen</h5><span class="badge bg-primary mb-2">@Model.MaNV</span>
+        <p class="text-muted">@Model.Position?.TenChucVu — @Model.Department?.TenPhongBan</p>
+        <span class="badge @(Model.TrangThai==TrangThaiNhanVien.DangLamViec?"bg-success":Model.TrangThai==TrangThaiNhanVien.NghiViec?"bg-danger":"bg-warning") mb-2">@Model.TrangThai.GetDisplayName()</span>
+        <hr/>
+        <div class="text-start"><p><i class="fas fa-birthday-cake me-2"></i>@Model.NgaySinh.ToString("dd/MM/yyyy")</p>
+        <p><i class="fas fa-venus-mars me-2"></i>@Model.GioiTinh.GetDisplayName()</p>
+        <p><i class="fas fa-phone me-2"></i>@(Model.SoDienThoai ?? "—")</p><p><i class="fas fa-envelope me-2"></i>@(Model.Email ?? "—")</p>
+        <p><i class="fas fa-id-card me-2"></i>@(Model.CCCD ?? "—")</p><p><i class="fas fa-map-marker-alt me-2"></i>@(Model.DiaChi ?? "—")</p>
+        <p><i class="fas fa-calendar me-2"></i>Vào làm: @Model.NgayVaoLam.ToString("dd/MM/yyyy")</p></div>
+    </div></div></div>
+    <div class="col-md-8">
+        <div class="card mb-3 stagger-item"><div class="card-header"><h6><i class="fas fa-file-contract me-2"></i>Hợp đồng (@Model.Contracts.Count)</h6></div><div class="card-body p-0">
+        <table class="table table-hover mb-0"><thead><tr><th>Mã HĐ</th><th>Loại</th><th>Thời hạn</th><th>Lương</th><th>Trạng thái</th></tr></thead><tbody>
+        @foreach(var c in Model.Contracts){<tr><td><a asp-controller="Contract" asp-action="Details" asp-route-id="@c.Id">@c.MaHopDong</a></td><td>@c.LoaiHopDong.GetDisplayName()</td>
+        <td>@c.NgayBatDau.ToString("dd/MM/yy") — @(c.NgayKetThuc?.ToString("dd/MM/yy")??"Vô thời hạn")</td><td>@c.LuongHopDong.ToString("N0")₫</td>
+        <td><span class="badge @(c.TrangThai==TrangThaiHopDong.HieuLuc?"bg-success":"bg-secondary")">@c.TrangThai.GetDisplayName()</span></td></tr>}
+        </tbody></table></div></div>
+
+        <div class="card mb-3 stagger-item"><div class="card-header"><h6><i class="fas fa-calendar-minus me-2"></i>Nghỉ phép (@Model.LeaveRequests.Count)</h6></div><div class="card-body p-0">
+        <table class="table table-hover mb-0"><thead><tr><th>Từ</th><th>Đến</th><th>Loại</th><th>Số ngày</th><th>Trạng thái</th></tr></thead><tbody>
+        @foreach(var lr in Model.LeaveRequests.OrderByDescending(l => l.NgayBatDau)){<tr><td>@lr.NgayBatDau.ToString("dd/MM/yy")</td><td>@lr.NgayKetThuc.ToString("dd/MM/yy")</td>
+        <td>@lr.LoaiNghi.GetDisplayName()</td><td>@lr.SoNgay</td>
+        <td><span class="badge @(lr.TrangThai==TrangThaiDonNghi.DaDuyet?"bg-success":lr.TrangThai==TrangThaiDonNghi.ChoDuyet?"bg-warning":lr.TrangThai==TrangThaiDonNghi.TuChoi?"bg-danger":"bg-secondary")">@lr.TrangThai.GetDisplayName()</span></td></tr>}
+        </tbody></table></div></div>
+
+        <div class="card mb-3 stagger-item"><div class="card-header"><h6><i class="fas fa-graduation-cap me-2"></i>Đào tạo (@Model.TrainingEmployees.Count)</h6></div><div class="card-body p-0">
+        <table class="table table-hover mb-0"><thead><tr><th>Khóa đào tạo</th><th>Bắt đầu</th><th>Kết thúc</th><th>Trạng thái</th></tr></thead><tbody>
+        @foreach(var te in Model.TrainingEmployees){<tr><td><a asp-controller="Training" asp-action="Details" asp-route-id="@te.TrainingId">@te.Training.TenKhoaHoc</a></td>
+        <td>@te.Training.NgayBatDau.ToString("dd/MM/yy")</td><td>@te.Training.NgayKetThuc.ToString("dd/MM/yy")</td>
+        @{var now=DateTime.Now;var status=te.Training.NgayKetThuc<now?"Hoàn thành":te.Training.NgayBatDau<=now?"Đang diễn ra":"Chưa bắt đầu";var cls=status=="Hoàn thành"?"bg-primary":status=="Đang diễn ra"?"bg-success":"bg-warning";}
+        <td><span class="badge @cls">@status</span></td></tr>}
+        </tbody></table></div></div>
+
+        <div class="card stagger-item"><div class="card-header"><h6><i class="fas fa-award me-2"></i>Khen thưởng / Kỷ luật (@Model.RewardDisciplines.Count)</h6></div><div class="card-body p-0">
+        <table class="table table-hover mb-0"><thead><tr><th>Ngày</th><th>Loại</th><th>Lý do</th><th>Số tiền</th></tr></thead><tbody>
+        @foreach(var r in Model.RewardDisciplines){<tr><td>@r.NgayQuyetDinh.ToString("dd/MM/yyyy")</td><td><span class="badge @(r.Loai==LoaiKhenThuongKyLuat.KhenThuong?"bg-success":"bg-danger")">@r.Loai.GetDisplayName()</span></td><td>@r.LyDo</td><td>@r.SoTien.ToString("N0")₫</td></tr>}
+        </tbody></table></div></div>
+    </div>
+</div>

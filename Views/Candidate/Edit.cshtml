@@ -1,0 +1,42 @@
+@model Candidate
+@{ ViewData["Title"] = "Sửa ứng viên"; }
+<div class="page-header"><h1><i class="fas fa-user-edit"></i> Sửa ứng viên</h1></div>
+<div class="card" style="max-width:600px"><div class="card-body">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="RecruitmentId" />
+        <input type="hidden" asp-for="CVFilePath" />
+        <div class="mb-3">
+            <label asp-for="HoTen" class="form-label"></label>
+            <input asp-for="HoTen" class="form-control" />
+            <span asp-validation-for="HoTen" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SDT" class="form-label"></label>
+            <input asp-for="SDT" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="NgayUngTuyen" class="form-label"></label>
+            <input asp-for="NgayUngTuyen" class="form-control" type="date" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="TrangThai" class="form-label"></label>
+            <select asp-for="TrangThai" asp-items="Html.GetEnumSelectList<TrangThaiUngVien>()" class="form-select"></select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">CV mới (tùy chọn)</label>
+            <input type="file" name="cv" class="form-control" accept=".pdf,.docx" />
+            @if (Model.CVFilePath != null)
+            {
+                <small class="text-muted">CV hiện tại: <a href="@Model.CVFilePath" target="_blank">Xem CV</a></small>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Lưu</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Hủy</a>
+    </form>
+</div></div>
+@section Scripts { @await Html.PartialAsync("_ValidationScriptsPartial") }

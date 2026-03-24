@@ -1,0 +1,29 @@
+@{ Layout = "_LoginLayout"; ViewData["Title"] = "Đăng nhập"; }
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <i class="fas fa-users-cog"></i>
+            <h1>HRMS</h1>
+            <p>Hệ thống Quản lý Nhân sự</p>
+        </div>
+        @await Html.PartialAsync("_Notification")
+        <form asp-action="Login" method="post">
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" name="email" class="form-control" placeholder="admin@gmail.com" required autofocus />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Mật khẩu</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••" required />
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" name="rememberMe" value="true" class="form-check-input" id="rememberMe" />
+                <label for="rememberMe" class="form-check-label">Ghi nhớ đăng nhập</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-sign-in-alt me-2"></i>Đăng nhập</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

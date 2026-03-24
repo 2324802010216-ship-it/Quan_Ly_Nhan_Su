@@ -1,0 +1,23 @@
+@model Employee
+@{ ViewData["Title"] = (Model?.Id ?? 0) == 0 ? "Thêm nhân viên" : "Sửa nhân viên"; var isEdit = (Model?.Id ?? 0) != 0; }
+<div class="page-header"><h1><i class="fas fa-user-plus"></i> @ViewData["Title"]</h1></div>
+<div class="card"><div class="card-body">
+<form asp-action="@(isEdit?"Edit":"Create")" method="post" enctype="multipart/form-data" style="max-width:700px">
+    @if(isEdit){<input type="hidden" asp-for="Id" /><input type="hidden" asp-for="AnhDaiDien" />}
+    <div class="row mb-3"><div class="col-md-4"><label asp-for="MaNV"></label><input asp-for="MaNV" class="form-control" /><span asp-validation-for="MaNV" class="text-danger"></span></div>
+    <div class="col-md-8"><label asp-for="HoTen"></label><input asp-for="HoTen" class="form-control" /><span asp-validation-for="HoTen" class="text-danger"></span></div></div>
+    <div class="row mb-3"><div class="col-md-4"><label asp-for="NgaySinh"></label><input asp-for="NgaySinh" type="date" class="form-control" /></div>
+    <div class="col-md-4"><label asp-for="GioiTinh"></label><select asp-for="GioiTinh" asp-items="Html.GetEnumSelectList<GioiTinh>()" class="form-select"></select></div>
+    <div class="col-md-4"><label asp-for="CCCD"></label><input asp-for="CCCD" class="form-control" /></div></div>
+    <div class="row mb-3"><div class="col-md-6"><label asp-for="Email"></label><input asp-for="Email" type="email" class="form-control" /></div>
+    <div class="col-md-6"><label asp-for="SoDienThoai"></label><input asp-for="SoDienThoai" class="form-control" /></div></div>
+    <div class="form-group mb-3"><label asp-for="DiaChi"></label><input asp-for="DiaChi" class="form-control" /></div>
+    <div class="row mb-3"><div class="col-md-6"><label asp-for="DepartmentId"></label><select asp-for="DepartmentId" class="form-select" asp-items="@ViewBag.Departments"></select></div>
+    <div class="col-md-6"><label asp-for="PositionId"></label><select asp-for="PositionId" class="form-select" asp-items="@ViewBag.Positions"></select></div></div>
+    <div class="row mb-3"><div class="col-md-4"><label asp-for="NgayVaoLam"></label><input asp-for="NgayVaoLam" type="date" class="form-control" /></div>
+    <div class="col-md-4"><label asp-for="TrangThai"></label><select asp-for="TrangThai" asp-items="Html.GetEnumSelectList<TrangThaiNhanVien>()" class="form-select"></select></div>
+    <div class="col-md-4"><label>Ảnh đại diện</label><input type="file" name="avatar" accept="image/*" class="form-control" /></div></div>
+    <div class="d-flex gap-2"><button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Lưu</button><a asp-action="Index" class="btn btn-secondary">Hủy</a></div>
+</form></div></div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

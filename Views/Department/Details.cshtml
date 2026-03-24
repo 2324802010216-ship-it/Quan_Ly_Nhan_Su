@@ -1,0 +1,27 @@
+@model Department
+@{ ViewData["Title"] = "Chi tiết phòng ban"; }
+<div class="page-header"><h1><i class="fas fa-building"></i> @Model.TenPhongBan</h1>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-edit me-1"></i>Sửa</a></div>
+<div class="row g-4">
+    <div class="col-md-4 stagger-item">
+        <div class="card"><div class="card-body">
+            <p><strong>Mô tả:</strong> @(Model.MoTa ?? "—")</p>
+            <p><strong>Trưởng phòng:</strong> @(Model.TruongPhong?.HoTen ?? "—")</p>
+            <p><strong>Ngày thành lập:</strong> @Model.NgayThanhLap.ToString("dd/MM/yyyy")</p>
+            <p><strong>Số nhân viên:</strong> <span class="badge bg-primary">@Model.Employees.Count</span></p>
+        </div></div>
+    </div>
+    <div class="col-md-8 stagger-item">
+        <div class="card"><div class="card-header"><h6>Danh sách nhân viên</h6></div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead><tr><th>Mã NV</th><th>Họ tên</th><th>Chức vụ</th><th>Trạng thái</th></tr></thead>
+                <tbody>
+                    @foreach (var e in Model.Employees)
+                    {<tr><td>@e.MaNV</td><td><a asp-controller="Employee" asp-action="Details" asp-route-id="@e.Id">@e.HoTen</a></td><td>@e.Position?.TenChucVu</td><td><span class="badge @(e.TrangThai==TrangThaiNhanVien.DangLamViec?"bg-success":"bg-secondary")">@e.TrangThai.GetDisplayName()</span></td></tr>}
+                    @if(!Model.Employees.Any()){<tr><td colspan="4" class="text-center text-muted py-3">Chưa có nhân viên</td></tr>}
+                </tbody>
+            </table>
+        </div></div>
+    </div>
+</div>

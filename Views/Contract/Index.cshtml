@@ -1,0 +1,17 @@
+@model List<Contract>
+@{ ViewData["Title"] = "Hợp đồng"; }
+<div class="page-header text-reveal-stagger"><h1><i class="fas fa-file-contract"></i> <span>Quản lý Hợp đồng</span></h1>
+<a asp-action="Create" class="btn btn-primary btn-magnetic"><span class="btn-text"><i class="fas fa-plus"></i> Thêm mới</span></a></div>
+<div class="card mb-3"><div class="card-body"><form method="get" class="row g-2 align-items-end">
+    <div class="col-auto"><label>Trạng thái</label><select name="trangThai" class="form-select"><option value="">Tất cả</option>
+    <option value="0" selected="@(ViewBag.TrangThai==0)">Hiệu lực</option><option value="1" selected="@(ViewBag.TrangThai==1)">Hết hạn</option>
+    <option value="2" selected="@(ViewBag.TrangThai==2)">Đã thanh lý</option><option value="3" selected="@(ViewBag.TrangThai==3)">Tạm hoãn</option></select></div>
+    <div class="col-auto"><button class="btn btn-primary"><i class="fas fa-filter"></i> Lọc</button></div>
+</form></div></div>
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0"><thead><tr><th>Mã HĐ</th><th>Nhân viên</th><th>Loại</th><th>Bắt đầu</th><th>Kết thúc</th><th>Lương</th><th>Trạng thái</th><th></th></tr></thead>
+<tbody>@foreach(var c in Model){<tr class="stagger-item"><td><strong>@c.MaHopDong</strong></td><td>@c.Employee.HoTen</td><td>@c.LoaiHopDong.GetDisplayName()</td><td>@c.NgayBatDau.ToString("dd/MM/yyyy")</td><td>@(c.NgayKetThuc?.ToString("dd/MM/yyyy")??"∞")</td><td>@c.LuongHopDong.ToString("N0")₫</td>
+<td><span class="badge @(c.TrangThai==TrangThaiHopDong.HieuLuc?"bg-success":"bg-secondary")">@c.TrangThai.GetDisplayName()</span>@if(c.SoNgayConLai.HasValue && c.SoNgayConLai<30){<span class="badge bg-warning ms-1">@c.SoNgayConLai ngày</span>}</td>
+<td class="text-end"><a asp-action="Details" asp-route-id="@c.Id" class="btn-action"><i class="fas fa-eye"></i></a><a asp-action="Edit" asp-route-id="@c.Id" class="btn-action"><i class="fas fa-edit"></i></a>
+@if(c.TrangThai!=TrangThaiHopDong.HieuLuc){<button class="btn-action danger" onclick="confirmDelete('@c.MaHopDong','@Url.Action("DeleteConfirmed",new{id=c.Id})')"><i class="fas fa-trash"></i></button>}</td></tr>}</tbody></table></div></div>
+@if((int?)ViewBag.TotalPages>1){<nav class="mt-3"><ul class="pagination justify-content-center">@for(int i=1;i<=(int)ViewBag.TotalPages;i++){<li class="page-item @(i==(int)ViewBag.Page?"active":"")"><a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-trangThai="@ViewBag.TrangThai">@i</a></li>}</ul></nav>}

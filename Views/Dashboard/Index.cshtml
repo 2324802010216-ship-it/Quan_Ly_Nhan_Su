@@ -1,0 +1,143 @@
+@model DashboardViewModel
+@{ ViewData["Title"] = "Dashboard"; }
+<div class="page-header text-reveal-stagger">
+    <h1><i class="fas fa-chart-line"></i> Dashboard</h1>
+</div>
+
+<!-- STAT CARDS -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3 stagger-item">
+        <div class="stat-card halo-card tilt-card">
+            <div class="tilt-glow"></div>
+            <div class="tilt-card-inner">
+                <div class="stat-info">
+                    <div class="stat-value" data-counter>@Model.TongNhanVien</div>
+                    <div class="stat-label">Tổng nhân viên</div>
+                </div>
+                <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 stagger-item">
+        <div class="stat-card halo-card tilt-card">
+            <div class="tilt-glow"></div>
+            <div class="tilt-card-inner">
+                <div class="stat-info">
+                    <div class="stat-value" data-counter>@Model.TongPhongBan</div>
+                    <div class="stat-label">Phòng ban</div>
+                </div>
+                <div class="stat-icon green"><i class="fas fa-building"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 stagger-item">
+        <div class="stat-card halo-card tilt-card">
+            <div class="tilt-glow"></div>
+            <div class="tilt-card-inner">
+                <div class="stat-info">
+                    <div class="stat-value" data-counter>@Model.HopDongSapHetHan</div>
+                    <div class="stat-label">HĐ sắp hết hạn</div>
+                </div>
+                <div class="stat-icon orange"><i class="fas fa-file-contract"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 stagger-item">
+        <div class="stat-card halo-card tilt-card">
+            <div class="tilt-glow"></div>
+            <div class="tilt-card-inner">
+                <div class="stat-info">
+                    <div class="stat-value" data-counter>@Model.DonPhepChoDuyet</div>
+                    <div class="stat-label">Đơn chờ duyệt</div>
+                </div>
+                <div class="stat-icon red"><i class="fas fa-calendar-minus"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CHARTS -->
+<div class="row g-4 mb-4">
+    <div class="col-md-7 stagger-item">
+        <div class="card">
+            <div class="card-header"><h6>Nhân viên theo phòng ban</h6></div>
+            <div class="card-body"><canvas id="chartPhongBan" height="250"></canvas></div>
+        </div>
+    </div>
+    <div class="col-md-5 stagger-item">
+        <div class="card">
+            <div class="card-header"><h6>Tuyển dụng 6 tháng gần nhất</h6></div>
+            <div class="card-body"><canvas id="chartTuyenDung" height="250"></canvas></div>
+        </div>
+    </div>
+</div>
+
+<!-- ALERTS -->
+<div class="row g-4">
+    <div class="col-md-6 stagger-item">
+        <div class="card">
+            <div class="card-header"><h6><i class="fas fa-exclamation-triangle text-warning me-2"></i>Hợp đồng sắp hết hạn</h6></div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Nhân viên</th><th>Mã HĐ</th><th>Hết hạn</th><th>Còn lại</th></tr></thead>
+                    <tbody>
+                        @foreach (var c in Model.HopDongCanhBao)
+                        {
+                            <tr>
+                                <td>@c.Employee.HoTen</td>
+                                <td>@c.MaHopDong</td>
+                                <td>@c.NgayKetThuc?.ToString("dd/MM/yyyy")</td>
+                                <td><span class="badge bg-warning">@c.SoNgayConLai ngày</span></td>
+                            </tr>
+                        }
+                        @if (!Model.HopDongCanhBao.Any()) { <tr><td colspan="4" class="text-center text-muted py-3">Không có cảnh báo</td></tr> }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 stagger-item">
+        <div class="card">
+            <div class="card-header"><h6><i class="fas fa-clock text-info me-2"></i>Đơn nghỉ phép chờ duyệt</h6></div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Nhân viên</th><th>Loại</th><th>Từ</th><th>Đến</th></tr></thead>
+                    <tbody>
+                        @foreach (var lr in Model.DonNghiChoDuyet)
+                        {
+                            <tr>
+                                <td>@lr.Employee.HoTen</td>
+                                <td><span class="badge bg-info">@lr.LoaiNghi.GetDisplayName()</span></td>
+                                <td>@lr.NgayBatDau.ToString("dd/MM")</td>
+                                <td>@lr.NgayKetThuc.ToString("dd/MM")</td>
+                            </tr>
+                        }
+                        @if (!Model.DonNghiChoDuyet.Any()) { <tr><td colspan="4" class="text-center text-muted py-3">Không có đơn chờ duyệt</td></tr> }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const ctxPB = document.getElementById('chartPhongBan');
+    if (ctxPB) new Chart(ctxPB, {
+        type: 'doughnut',
+        data: { labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TenPhongBans)),
+                datasets: [{ data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SoNVTheoPhong)),
+                    backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4'] }] },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    const ctxTD = document.getElementById('chartTuyenDung');
+    if (ctxTD) new Chart(ctxTD, {
+        type: 'bar',
+        data: { labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ThangLabels)),
+                datasets: [{ label: 'Tin tuyển dụng', data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SoTuyenDungTheoThang)),
+                    backgroundColor: '#3b82f6', borderRadius: 6 }] },
+        options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+    });
+</script>
+}

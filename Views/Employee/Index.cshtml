@@ -1,0 +1,30 @@
+@model EmployeeFilterViewModel
+@{ ViewData["Title"] = "Nhân viên"; }
+<div class="page-header text-reveal-stagger">
+    <h1><i class="fas fa-users"></i> <span>Quản lý Nhân viên</span></h1>
+    <a asp-action="Create" class="btn btn-primary btn-magnetic"><span class="btn-text"><i class="fas fa-plus"></i> Thêm mới</span></a>
+</div>
+<div class="card mb-3"><div class="card-body">
+<form method="get" class="row g-2 align-items-end">
+    <div class="col-md-3"><input name="Search" value="@Model.Search" class="form-control" placeholder="Tìm theo mã/tên..." /></div>
+    <div class="col-md-2"><select name="DepartmentId" class="form-select"><option value="">Phòng ban</option>@foreach(var d in Model.Departments){<option value="@d.Id" selected="@(Model.DepartmentId==d.Id)">@d.TenPhongBan</option>}</select></div>
+    <div class="col-md-2"><select name="PositionId" class="form-select"><option value="">Chức vụ</option>@foreach(var p in Model.Positions){<option value="@p.Id" selected="@(Model.PositionId==p.Id)">@p.TenChucVu</option>}</select></div>
+    <div class="col-md-2"><select name="TrangThai" class="form-select"><option value="">Trạng thái</option>
+    <option value="0" selected="@(Model.TrangThai==0)">Đang làm</option><option value="1" selected="@(Model.TrangThai==1)">Thử việc</option>
+    <option value="2" selected="@(Model.TrangThai==2)">Nghỉ việc</option><option value="3" selected="@(Model.TrangThai==3)">Nghỉ thai sản</option></select></div>
+    <div class="col-auto"><button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Lọc</button></div>
+</form></div></div>
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0">
+    <thead><tr><th>Mã NV</th><th>Họ tên</th><th>Phòng ban</th><th>Chức vụ</th><th>Trạng thái</th><th></th></tr></thead>
+    <tbody>
+        @foreach (var e in Model.Employees)
+        {<tr class="stagger-item"><td><strong>@e.MaNV</strong></td><td>@e.HoTen</td><td>@e.Department.TenPhongBan</td><td>@e.Position.TenChucVu</td>
+        <td><span class="badge @(e.TrangThai==TrangThaiNhanVien.DangLamViec?"bg-success":"bg-secondary")">@e.TrangThai.GetDisplayName()</span></td>
+        <td class="text-end"><a asp-action="Details" asp-route-id="@e.Id" class="btn-action"><i class="fas fa-eye"></i></a><a asp-action="Edit" asp-route-id="@e.Id" class="btn-action"><i class="fas fa-edit"></i></a>
+        @if(User.IsInRole("Admin")){<button class="btn-action danger" onclick="confirmDelete('@e.HoTen','@Url.Action("DeleteConfirmed",new{id=e.Id})')"><i class="fas fa-trash"></i></button>}</td></tr>}
+    </tbody>
+</table></div></div>
+@if(Model.TotalPages > 1){<nav class="mt-3"><ul class="pagination justify-content-center">
+@for(int i=1;i<=Model.TotalPages;i++){<li class="page-item @(i==Model.Page?"active":"")"><a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-Search="@Model.Search" asp-route-DepartmentId="@Model.DepartmentId">@i</a></li>}
+</ul></nav>}

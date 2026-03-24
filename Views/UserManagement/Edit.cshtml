@@ -1,0 +1,16 @@
+@model EditUserViewModel
+@{ ViewData["Title"] = "Sửa tài khoản"; }
+<div class="page-header"><h1><i class="fas fa-user-edit"></i> Sửa tài khoản</h1></div>
+<div class="card" style="max-width:500px"><div class="card-body">
+<div asp-validation-summary="All" class="text-danger mb-3"></div>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group mb-3"><label>Email</label><input asp-for="Email" type="email" class="form-control" readonly /></div>
+    <div class="form-group mb-3"><label>Họ tên</label><input asp-for="HoTen" class="form-control" /></div>
+    <div class="form-group mb-3"><label>Vai trò</label><select asp-for="Role" class="form-select" asp-items="@ViewBag.Roles"><option value="">-- Chọn vai trò --</option></select></div>
+    <div class="form-group mb-3"><label>Liên kết nhân viên</label><select asp-for="EmployeeId" class="form-select" asp-items="@ViewBag.Employees"><option value="">-- Không liên kết --</option></select></div>
+    <hr/>
+    <div class="form-group mb-3"><label>Đặt lại mật khẩu <small class="text-muted">(để trống nếu không đổi)</small></label><input asp-for="NewPassword" type="password" class="form-control" /><small class="text-muted">Tối thiểu 6 ký tự, có ít nhất 1 số</small></div>
+    <div class="d-flex gap-2"><button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Lưu</button><a asp-action="Index" class="btn btn-secondary">Hủy</a></div>
+</form></div></div>
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

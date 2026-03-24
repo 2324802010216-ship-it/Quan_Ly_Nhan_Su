@@ -1,0 +1,19 @@
+@model Recruitment
+@{ ViewData["Title"] = Model.Id==0?"Thêm tin tuyển dụng":"Sửa tuyển dụng"; var isEdit=Model.Id!=0; }
+<div class="page-header"><h1><i class="fas fa-bullhorn"></i> @ViewData["Title"]</h1></div>
+<div class="card" style="max-width:600px"><div class="card-body">
+<form asp-action="@(isEdit?"Edit":"Create")" method="post">
+    @if(isEdit){<input type="hidden" asp-for="Id" />}
+    <div class="form-group mb-3"><label asp-for="TieuDe"></label><input asp-for="TieuDe" class="form-control" /></div>
+    <div class="row mb-3"><div class="col"><label asp-for="PhongBanId"></label><select asp-for="PhongBanId" class="form-select" asp-items="@ViewBag.Departments"></select></div>
+    <div class="col"><label asp-for="PositionId"></label><select asp-for="PositionId" class="form-select" asp-items="@ViewBag.Positions"></select></div></div>
+    <div class="row mb-3"><div class="col"><label asp-for="SoLuong"></label><input asp-for="SoLuong" type="number" min="1" class="form-control" /></div>
+    <div class="col"><label asp-for="TrangThai"></label><select asp-for="TrangThai" asp-items="Html.GetEnumSelectList<TrangThaiTuyenDung>()" class="form-select"></select></div></div>
+    <div class="form-group mb-3"><label asp-for="MoTaCongViec"></label><textarea asp-for="MoTaCongViec" class="form-control" rows="3"></textarea></div>
+    <div class="form-group mb-3"><label asp-for="YeuCau"></label><textarea asp-for="YeuCau" class="form-control" rows="3"></textarea></div>
+    <div class="row mb-3"><div class="col"><label asp-for="NgayDang"></label><input asp-for="NgayDang" type="date" class="form-control" /></div>
+    <div class="col"><label asp-for="HanNop"></label><input asp-for="HanNop" type="date" class="form-control" /></div></div>
+    <div class="d-flex gap-2"><button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Lưu</button><a asp-action="Index" class="btn btn-secondary">Hủy</a></div>
+</form></div></div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }
