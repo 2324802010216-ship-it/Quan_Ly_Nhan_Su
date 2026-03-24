@@ -6,3 +6,4 @@ logs/
 *.suo
 *.cache
 *.log
+cookies.txt
